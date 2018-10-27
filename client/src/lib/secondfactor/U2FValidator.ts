@@ -47,14 +47,12 @@ function u2fApiSign(appId: string, challenge: string,
   });
 }
 
-function startU2fAuthentication($: JQueryStatic, notifier: INotifier)
+function startU2fAuthentication($: JQueryStatic)
   : BluebirdPromise<string> {
 
   return GetPromised($, Endpoints.SECOND_FACTOR_U2F_SIGN_REQUEST_GET, {},
     undefined, "json")
     .then(function (signResponse: SignMessage) {
-      notifier.info(UserMessages.PLEASE_TOUCH_TOKEN);
-
       const registeredKey: U2fApi.RegisteredKey = {
         keyHandle: signResponse.keyHandle,
         version: "U2F_V2",
@@ -72,7 +70,7 @@ function startU2fAuthentication($: JQueryStatic, notifier: INotifier)
 
 
 export function validate($: JQueryStatic, notifier: INotifier) {
-  return startU2fAuthentication($, notifier)
+  return startU2fAuthentication($)
     .catch(function (err: Error) {
       notifier.error(UserMessages.U2F_TRANSACTION_FINISH_FAILED);
       return BluebirdPromise.reject(err);

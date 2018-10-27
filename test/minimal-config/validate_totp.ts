@@ -37,15 +37,9 @@ describe('Validate TOTP factor', function() {
         const driver = this.driver;
         
         return VisitPage(driver, "https://login.example.com:8080/?rd=https://admin.example.com:8080/secret.html")
-          .then(() => {
-            return FillLoginPageWithUserAndPasswordAndClick(driver, 'john', 'password');
-          })
-          .then(() => {
-            return ValidateTotp(driver, secret);
-          })
-          .then(() => {
-            return WaitRedirected(driver, "https://admin.example.com:8080/secret.html")
-          });
+          .then(() => FillLoginPageWithUserAndPasswordAndClick(driver, 'john', 'password'))
+          .then(() => ValidateTotp(driver, secret))
+          .then(() => WaitRedirected(driver, "https://admin.example.com:8080/secret.html"));
       });
 
       it("should access the secret", function() {
